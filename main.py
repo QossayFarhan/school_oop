@@ -105,7 +105,10 @@ elif choice1 == "reg":
         with open("regester.json", "r") as read_file:
             data = json.load(read_file)
 
-            data['reg'][reg1.course_name].append(reg1.student_name)
+            if reg1.course_name in data['reg']:
+                data['reg'][reg1.course_name].append(reg1.student_name)
+            else:
+                data['reg'][reg1.course_name] = [reg1.student_name]
 
         with open("regester.json", "w+") as jsonFile:
             jsonFile.write(json.dumps(data))
