@@ -41,18 +41,24 @@ if choice1 == "add":
 
         full_object = [student1.name, student1.age, student1.grade]
 
-        with open('student.Json', 'a') as outfile:
-            outfile.write(json.dumps(full_object))
-            outfile.write(",")
-            outfile.close()
+        with open("student.Json", "r") as read_file:
+            data = json.load(read_file)
+
+            data['students'].append(full_object)
+
+        with open("student.Json", "w+") as jsonFile:
+            jsonFile.write(json.dumps(data))
 
     elif choice2 == 'c':
         course1 = Course
         course1.name = input("enter course name : ")
-        with open('course.Json', 'a') as outfile:
-            outfile.write(json.dumps(course1.name))
-            outfile.write(",")
-            outfile.close()
+        with open("course.Json", "r") as read_file:
+            data = json.load(read_file)
+
+            data['cou'].append(course1.name)
+
+        with open("course.Json", "w+") as jsonFile:
+            jsonFile.write(json.dumps(data))
 
     elif choice2 == 't':
 
@@ -63,10 +69,13 @@ if choice1 == "add":
 
         full_object = [obj_name.name, obj_name.course, obj_name.salary]
 
-        with open('teacher.json', 'a') as outfile:
-            outfile.write(json.dumps(full_object))
-            outfile.write(",")
-            outfile.close()
+        with open("teacher.json", "r") as read_file:
+            data = json.load(read_file)
+
+            data['teachers'].append(full_object)
+
+        with open("teacher.json", "w+") as jsonFile:
+            jsonFile.write(json.dumps(data))
 
     else:
         print("please enter a valid letter ")
@@ -76,12 +85,30 @@ elif choice1 == "reg":
     reg1.student_name = input("enter the student name")
     reg1.course_name = input("enter the course name")
 
-    full_object = [reg1.student_name, reg1.course_name]
+    with open("student.Json", "r") as read_student:
+        S_data = json.load(read_student)
+        if reg1.student_name in [j for i in S_data['students'] for j in i]:
+            student_check = True
+        else:
+            student_check = False
+            print("student is not registered in the system ")
 
-    with open('regester.json', 'a') as outfile:
-        outfile.write(json.dumps(full_object))
-        outfile.write(",")
-        outfile.close()
+    with open("course.Json", "r") as read_course:
+        C_data = json.load(read_course)
+        if reg1.course_name in C_data['cou']:
+            course_check = True
+        else:
+            print("course is not registered in the system")
+            course_check = False
+
+    if student_check is True & course_check is True:
+        with open("regester.json", "r") as read_file:
+            data = json.load(read_file)
+
+            data['reg'][reg1.course_name].append(reg1.student_name)
+
+        with open("regester.json", "w+") as jsonFile:
+            jsonFile.write(json.dumps(data))
 
 else:
     print("please enter a valid choice ")
